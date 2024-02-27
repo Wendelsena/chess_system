@@ -2,6 +2,7 @@ package boardgame;
 
 public class Position {
 
+	// gera as posições
 	private int row;
 	private int column;
 
@@ -30,6 +31,7 @@ public class Position {
 		this.column = column;
 	}
 
+	// imprime a posição na tela
 	@Override
 	public String toString() {
 		return row + ", " + column;
