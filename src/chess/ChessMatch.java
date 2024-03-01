@@ -8,11 +8,23 @@ import chess.pieces.Rook;
 
 public class ChessMatch {
 
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+
+	public int getTurn() {
+		return turn;
+	}
+
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -24,12 +36,12 @@ public class ChessMatch {
 		}
 		return mat;
 	}
-	
+
 	public boolean[][] possibleMoves(ChessPosition sourcePosition) {
 		Position position = sourcePosition.toPosition();
 		validateSourcePosition(position);
 		return board.piece(position).possibleMoves(); //
-		}
+	}
 
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		Position source = sourcePosition.toPosition();
@@ -37,6 +49,7 @@ public class ChessMatch {
 		validateSourcePosition(source); // valida a posição de origem
 		validateTargetPosition(source, target); // valida a posição de destino
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -51,18 +64,30 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(position)) {
 			throw new ChessException("There is no piece on source position.");
 		}
+		// testo a cor 
+		if (currentPlayer != ((ChessPiece)board.piece(position)).getColor()) {
+			throw new ChessException("The chosen piece on source position.");
+		}
 		// se não ouver movimentos possiveis, lançe a excessão:
-		if(!board.piece(position).isThereAnyPossibleMove()) {
+		if (!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible moves for the chosen piece.");
 		}
 		
+
 	}
-	
+
 	// valida a posição de destino
 	private void validateTargetPosition(Position source, Position target) {
 		if (!board.piece(source).possibleMoves(target)) { // se para peça de origin não for um movimento possivel, faça:
 			throw new ChessException("The chosen piece can´t move to target position.");
 		}
+	}
+
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+		// expressão condicional ternaria >>>> se o jogador atual for white então agr é
+		// BLACK, caso o contrario será WHITE.
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
