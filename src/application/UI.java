@@ -30,18 +30,20 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-	// le uma posição do usuario
-	public static ChessPosition readChessPosition(Scanner sc) { // recebe como argumento o Scanner na classe principal
+	// https://stackoverflow.com/questions/2979383/java-clear-the-console
+	public static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
+	public static ChessPosition readChessPosition(Scanner sc) {
 		try {
 			String s = sc.nextLine();
-			char column = s.charAt(0); // charAt(0) porque a coluna é a posição 0 da String (ex: a1)
-			int row = Integer.parseInt(s.substring(1)); // parseInt(s.substring(1) porque a coluna é a segunda posição
-														// do Scanner
+			char column = s.charAt(0);
+			int row = Integer.parseInt(s.substring(1));
 			return new ChessPosition(column, row);
 		} catch (RuntimeException e) {
-			// InputMismatchException é padrão java, se diz sobre qualquer erro de entrada
-			// de dado.
-			throw new InputMismatchException("Error reading ChessPosition. Valid are from a1 to h8.");
+			throw new InputMismatchException("Error reading ChessPosition. Valid values are from a1 to h8.");
 		}
 	}
 

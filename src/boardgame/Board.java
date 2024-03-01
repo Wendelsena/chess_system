@@ -1,9 +1,7 @@
 package boardgame;
 
-// cria o tabuleiro
 public class Board {
 
-	// controla o tabuleiro suas posições
 	private int rows;
 	private int columns;
 	private Piece[][] pieces;
@@ -39,7 +37,6 @@ public class Board {
 		return pieces[position.getRow()][position.getColumn()];
 	}
 
-	// altera o local da peça
 	public void placePiece(Piece piece, Position position) {
 		if (thereIsAPiece(position)) {
 			throw new BoardException("There is already a piece on position " + position);
@@ -48,38 +45,31 @@ public class Board {
 		piece.position = position;
 	}
 
-	// remove a peça de uma dada posição do tabuleiro
 	public Piece removePiece(Position position) {
 		if (!positionExists(position)) {
-			throw new BoardException("position not on the board.");
+			throw new BoardException("Position not on the board");
 		}
-		// se a peça nessa posição é igual a null
 		if (piece(position) == null) {
 			return null;
 		}
 		Piece aux = piece(position);
-		aux.position = null; // a peça foi retirada
-		pieces[position.getRow()][position.getColumn()] = null; // indica que não existe mais peça na posição
+		aux.position = null;
+		pieces[position.getRow()][position.getColumn()] = null;
 		return aux;
 	}
 
-	// diz se a posição existe ou não no tabuleiro
-	private Boolean positionExists(int row, int column) {
+	private boolean positionExists(int row, int column) {
 		return row >= 0 && row < rows && column >= 0 && column < columns;
 	}
 
-	// diz se a posição existe ou não no tabuleiro
 	public boolean positionExists(Position position) {
 		return positionExists(position.getRow(), position.getColumn());
 	}
 
-	// testa se tem uma peça na posição
 	public boolean thereIsAPiece(Position position) {
-		// testa se já uma peça nesta posição
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board");
 		}
 		return piece(position) != null;
 	}
-
 }

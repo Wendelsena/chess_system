@@ -1,21 +1,18 @@
 package chess;
 
 import boardgame.Board;
-import boardgame.BoardException;
 import boardgame.Piece;
 import boardgame.Position;
 import chess.pieces.King;
 import chess.pieces.Rook;
 
-// cria a partida
 public class ChessMatch {
 
 	private Board board;
 
-	// cria um tabuleiro 8/8
 	public ChessMatch() {
 		board = new Board(8, 8);
-		InitialSetup();
+		initialSetup();
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -28,7 +25,6 @@ public class ChessMatch {
 		return mat;
 	}
 
-	// método para retornar uma posição capturada (lógica de captura)
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
 		Position source = sourcePosition.toPosition();
 		Position target = targetPosition.toPosition();
@@ -37,28 +33,24 @@ public class ChessMatch {
 		return (ChessPiece) capturedPiece;
 	}
 
-	// lógica de movimento
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source);
-		Piece capturedPiece = board.removePiece(target); // remove a possivel peça que eseja na posição de destino
-		board.placePiece(p, target); // coloca a posiçãod de origem na posição de destino.
-		return capturedPiece; // retorna a peça capturada
+		Piece capturedPiece = board.removePiece(target);
+		board.placePiece(p, target);
+		return capturedPiece;
 	}
-	
-	// se não existir uma peça nessa posição, retorne uma excessão.
+
 	private void validateSourcePosition(Position position) {
 		if (!board.thereIsAPiece(position)) {
-			throw new BoardException("Position not on the board.");
+			throw new ChessException("There is no piece on source position");
 		}
 	}
 
-	// operação para colocar peça passando a posição nas coordenadas do xadrez
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
-		board.placePiece(piece, new ChessPosition(column, row).toPosition()); //
+		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 	}
 
-	// inicia a partida
-	private void InitialSetup() {
+	private void initialSetup() {
 		placeNewPiece('c', 1, new Rook(board, Color.WHITE));
 		placeNewPiece('c', 2, new Rook(board, Color.WHITE));
 		placeNewPiece('d', 2, new Rook(board, Color.WHITE));
